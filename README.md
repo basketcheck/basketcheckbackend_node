@@ -1,4 +1,4 @@
-# BSSMBALL
+# BSSMBALL
 
 ## Commit Rules
 
