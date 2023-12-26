@@ -3,6 +3,7 @@ const User = require("../models/User");
 const Vote = require("../models/Vote");
 const router = express.Router();
 const { Op } = require('sequelize');
+const bcrypt = require('bcrypt');
 
 
 //join
