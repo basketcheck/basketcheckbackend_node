@@ -1,8 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 const { sequelize } = require("./models");
-const loginRouter = require("./routes/loginRouter");
-const teamRouter = require("./routes/teamRouter");
 
 const app = express();
 app.use(cors());
@@ -21,7 +19,10 @@ sequelize
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+
+const loginRouter = require("./routes/loginRouter");
 app.use("/login", loginRouter);
+const teamRouter = require("./routes/teamRouter");
 app.use("/team", teamRouter);
 
 app.listen(app.get("port"), () => {

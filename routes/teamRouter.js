@@ -9,26 +9,20 @@ const { validateToken } = require('../middleware/AuthMiddleware');
 
 
 
-//join
 router.get('/join', validateToken, async (req, res) => {
   try {
-    // 요청으로부터 name 파라미터 추출
-    const userid = req.user.name; // 객체로 저장한 디코딩 값을 저장합니다.
-    const name = req.query.name; // 요청으로부터 name 값을 추출합니다.
+    const username = req.user.name;
+    console.log(username);
 
-    // 시퀄라이즈를 사용하여 Vote 테이블에 새로운 행을 생성하여 name 값을 저장
-    const vote = await Vote.create({ name });
+    const vote = await Vote.create({ name: username }); // 'name' 필드에 'username' 값을 저장
 
     res.status(201).json({ vote });
   } catch (error) {
-    // 오류 처리
     console.error(error);
     res.status(500).json({ message: '투표 생성 도중 오류가 발생했습니다.' });
   }
-});
-
-  
-  // //starting
+});  
+  //starting
   router.get('/starting', validateToken, async (req, res) => {
     try {
       // Vote 테이블에서 Votenum≤10인 name들을 조회
@@ -97,4 +91,5 @@ router.get('/join', validateToken, async (req, res) => {
     }
     return array;
   }
+
 module.exports = router;
