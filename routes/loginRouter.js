@@ -4,6 +4,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const { sign } = require('jsonwebtoken');
 
+
 //signup
 router.post('/signup', async (req, res) => {
   try {
@@ -26,7 +27,6 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-//signin
 router.post('/signin', async (req, res) => {
   try {
     // 요청으로부터 사용자 정보 추출
@@ -34,7 +34,6 @@ router.post('/signin', async (req, res) => {
 
     // 사용자 확인
     const user = await User.findOne({ where: { Id } });
-    const name = await User.findOne(name, { where: { Id } })
 
     // 사용자가 존재하지 않는 경우
     if (!user) {
@@ -46,18 +45,20 @@ router.post('/signin', async (req, res) => {
     if (!passwordMatch) {
       return res.status(401).json({ message: '비밀번호가 일치하지 않습니다.' });
     }
+
     const accessToken = sign(
       { id: user.Id, name: user.name },
       'importantsecret'
-  );
+    );
 
     // 로그인 성공
-    res.status(200).json({ message: '로그인이 성공적으로 완료되었습니다.', accessToken : accessToken});
+    res.status(200).json({ message: '로그인이 성공적으로 완료되었습니다.', accessToken: accessToken });
   } catch (error) {
     // 오류 처리
     console.error(error);
     res.status(500).json({ message: '로그인 도중 오류가 발생했습니다.' });
   }
 });
+
 
 module.exports = router;
