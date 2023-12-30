@@ -7,8 +7,6 @@ const bcrypt = require('bcrypt');
 const { sign } = require('jsonwebtoken');
 const { validateToken } = require('../middleware/AuthMiddleware');
 
-
-
 router.get('/join', validateToken, async (req, res) => {
   try {
     const username = req.user.name;
@@ -21,7 +19,8 @@ router.get('/join', validateToken, async (req, res) => {
     console.error(error);
     res.status(500).json({ message: '투표 생성 도중 오류가 발생했습니다.' });
   }
-});  
+}); 
+
   //starting
   router.get('/starting', validateToken, async (req, res) => {
     try {
