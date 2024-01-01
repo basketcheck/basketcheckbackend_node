@@ -10,16 +10,25 @@ const { validateToken } = require('../middleware/AuthMiddleware');
 router.get('/join', validateToken, async (req, res) => {
   try {
     const username = req.user.name;
-    console.log(username);
+    // console.log(username);
 
-    const vote = await Vote.create({ name: username }); // 'name' 필드에 'username' 값을 저장
+    const vote = await Vote.findOne({ where: { name: username } }); // 'name'이 'username'인 항목 조회
+    console.log(vote);
 
-    res.status(201).json({ vote });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: '투표 생성 도중 오류가 발생했습니다.' });
-  }
-}); 
+    if(vote){
+      const DeleteVote = await Vote.destroy({ where: { name: username } });
+      res.status(201).json({ message : '투표가 삭제되었습니다.' });
+      
+      } else {
+      const CreateVote = await Vote.create({ name: username }); // 'name' 필드에 'username' 값을 저장
+      res.status(200).json({ message : '투표가 생성되었습니다' });
+      
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: '투표 생성 도중 오류가 발생했습니다.' });
+    }
+  });
 
   //starting
   router.get('/starting', validateToken, async (req, res) => {
