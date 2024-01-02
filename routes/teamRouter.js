@@ -17,11 +17,11 @@ router.get('/join', validateToken, async (req, res) => {
 
     if(vote){
       const DeleteVote = await Vote.destroy({ where: { name: username } });
-      res.status(201).json({ message : '투표가 삭제되었습니다.', title : '투표하기'});
+      res.status(201).json({ message : '투표가 삭제되었습니다.', title : '농구하러가기'});
       
       } else {
       const CreateVote = await Vote.create({ name: username }); // 'name' 필드에 'username' 값을 저장
-      res.status(200).json({ message : '투표가 생성되었습니다', title : '투표취소하기' });
+      res.status(200).json({ message : '투표가 생성되었습니다', title : '취소하기' });
       
       }
     } catch (error) {
