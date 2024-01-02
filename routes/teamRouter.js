@@ -7,13 +7,13 @@ const bcrypt = require('bcrypt');
 const { sign } = require('jsonwebtoken');
 const { validateToken } = require('../middleware/AuthMiddleware');
 
-router.get('/join', validateToken, async (req, res) => {
+router.post('/join', validateToken, async (req, res) => {
   try {
     const username = req.user.name;
     // console.log(username);
 
     const vote = await Vote.findOne({ where: { name: username } }); // 'name'이 'username'인 항목 조회
-    console.log(vote);
+    // console.log(vote);
 
     if(vote){
       const DeleteVote = await Vote.destroy({ where: { name: username } });
@@ -33,13 +33,9 @@ router.get('/join', validateToken, async (req, res) => {
   //starting
   router.get('/starting', validateToken, async (req, res) => {
     try {
-      // Vote 테이블에서 Votenum≤10인 name들을 조회
+      // Vote 테이블에서 추가된 순서가 가장 빠른 10개의 name을 조회
       const votes = await Vote.findAll({
-        where: {
-          Votenum: {
-            [Op.lte]: 10
-          }
-        },
+        limit: 10, // 최대 10개의 결과만 가져오기
         attributes: ['name']
       });
   
@@ -52,15 +48,11 @@ router.get('/join', validateToken, async (req, res) => {
   });
 
   //changer
-  router.get('/changer',validateToken, async (req, res) => {
+  router.get('/changer', validateToken, async (req, res) => {
     try {
-      // Vote 테이블에서 Votenum>10인 name들을 조회
+      // Vote 테이블에서 11번째부터 나머지 name을 조회
       const votes = await Vote.findAll({
-        where: {
-          Votenum: {
-            [Op.gt]: 10
-          }
-        },
+        offset: 10, // 11번째부터 시작
         attributes: ['name']
       });
   
@@ -84,7 +76,7 @@ router.get('/join', validateToken, async (req, res) => {
       const team1 = shuffledVotes.slice(0, Math.ceil(shuffledVotes.length / 2));
       const team2 = shuffledVotes.slice(Math.ceil(shuffledVotes.length / 2));
   
-      res.status(200).json({ team1, team2 });
+      res.status(200).send({ team1, team2 });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: '조회 도중 오류가 발생했습니다.' });
