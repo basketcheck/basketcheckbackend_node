@@ -67,16 +67,18 @@ router.post('/join', validateToken, async (req, res) => {
   router.get('/shuffle', validateToken, async (req, res) => {
     try {
       // Vote 테이블에서 모든 레코드 조회
-      const votes = await Vote.findAll();
+      const votes = await Vote.findAll({
+        attributes: ['name']
+      });
   
       // 조회된 레코드를 랜덤하게 섞음
       const shuffledVotes = shuffleArray(votes);
-  
+      const shuffledVotesNames = shuffledVotes.map(vote => vote.name);
       // 레코드를 두 팀으로 나눔
-      const team1 = shuffledVotes.slice(0, Math.ceil(shuffledVotes.length / 2));
-      const team2 = shuffledVotes.slice(Math.ceil(shuffledVotes.length / 2));
+      // const team1 = shuffledVotes.slice(0, Math.ceil(shuffledVotes.length / 2));
+      // const team2 = shuffledVotes.slice(Math.ceil(shuffledVotes.length / 2));
   
-      res.status(200).send({ team1, team2 });
+      res.status(200).send({ message: '팀섞기를 성공했습니다.', shuffledVotes: shuffledVotesNames });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: '조회 도중 오류가 발생했습니다.' });
