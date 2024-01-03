@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { sequelize } = require("./models");
+const cron = require('node-cron');
 
 const app = express();
 app.use(cors());
@@ -27,4 +28,14 @@ app.use("/team", teamRouter);
 
 app.listen(app.get("port"), () => {
   console.log(app.get("port"), "번 포트에서 대기 중");
+});
+
+cron.schedule('0 0 * * *', () => {
+  Vote.destroy({ truncate: true }) // Vote 테이블 초기화
+    .then(() => {
+      console.log('Vote 테이블 초기화 완료');
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 });
