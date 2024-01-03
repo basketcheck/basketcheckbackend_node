@@ -68,6 +68,7 @@ router.post('/join', validateToken, async (req, res) => {
     try {
       // Vote 테이블에서 모든 레코드 조회
       const votes = await Vote.findAll({
+        limit: 10, // 최대 10개의 결과만 가져오기
         attributes: ['name']
       });
   
