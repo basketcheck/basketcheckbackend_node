@@ -4,8 +4,14 @@ const { sequelize } = require("./models");
 const cron = require('node-cron');
 
 const app = express();
-app.use(cors());
-
+app.use(
+	cors({
+		origin: 'https://bssmball.netlify.app/ㅋ',
+		credentials: true,
+		withCredentials: true,
+		optionsSuccessStatus: 200,
+	})
+);
 app.set("port", process.env.PORT);
 
 sequelize
