@@ -11,6 +11,18 @@ router.post('/signup', async (req, res) => {
     // 요청으로부터 사용자 정보 추출
     const { Id, name, password } = req.body;
 
+     // 사용자 ID 중복 확인
+     const existingUser = await User.findOne({ where: { Id } });
+     if (existingUser) {
+       return res.status(400).json({ message: '이미 사용 중인 아이디입니다.' });
+     }
+ 
+     // 사용자 이름 중복 확인
+     const existingName = await User.findOne({ where: { name } });
+     if (existingName) {
+       return res.status(400).json({ message: '이미 사용 중인 이름입니다.' });
+     }
+     
     // 패스워드 암호화
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
