@@ -6,7 +6,7 @@ const cron = require('node-cron');
 const app = express();
 app.use(
 	cors({
-		origin: 'https://bssmball.netlify.app/',
+		origin: 'http://localhost:3000/',
 		credentials: true,
 		withCredentials: true,
 		optionsSuccessStatus: 200,
