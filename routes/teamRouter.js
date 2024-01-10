@@ -7,6 +7,22 @@ const bcrypt = require('bcrypt');
 const { sign } = require('jsonwebtoken');
 const { validateToken } = require('../middleware/AuthMiddleware');
 
+router.get('/join', validateToken, async (req, res) => {
+  try {
+  const username = req.user.name;
+  const vote = await Vote.findOne({ where: { name: username } }); // 'name'이 'username'인 항목 조회
+  if(vote){
+    res.status(201).json({ message : '이미 참여했습니다.', status : 'True'});
+    
+    } else {
+    res.status(200).json({ message : '참여하지 않았습니다.', status : 'False'});
+    } 
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: '투표 생성 도중 오류가 발생했습니다.' });
+    }
+}); 
+
 router.post('/join', validateToken, async (req, res) => {
   try {
     const username = req.user.name;
