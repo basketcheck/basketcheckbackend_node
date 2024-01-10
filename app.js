@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const { sequelize } = require("./models");
 const cron = require('node-cron');
-// const { swaggerUi, specs } = require('./modules/swagger');
+const { swaggerUi, specs } = require('./modules/swagger');
 const app = express();
 
 app.use(
@@ -15,7 +15,7 @@ app.use(
 );
 
 app.set("port", process.env.PORT);
-// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 sequelize
   .sync({ force: false })
@@ -37,6 +37,10 @@ app.use("/team", teamRouter);
 
 app.listen(app.get("port"), () => {
   console.log(app.get("port"), "번 포트에서 대기 중");
+});
+
+app.get('/', (req, res) => {
+	res.send('BSSMBALL API (PORT : 9898)');
 });
 
 cron.schedule('0 0 * * *', () => {
