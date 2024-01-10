@@ -49,10 +49,11 @@ router.post('/join', validateToken, async (req, res) => {
   //starting
   router.get('/starting', validateToken, async (req, res) => {
     try {
-      // Vote 테이블에서 추가된 순서가 가장 빠른 10개의 name을 조회
+      // Vote 테이블에서 votenum이 작은 순서대로 10개의 name을 조회
       const votes = await Vote.findAll({
         limit: 10, // 최대 10개의 결과만 가져오기
-        attributes: ['name']
+        attributes: ['name'],
+        order: [['votenum', 'ASC']] // votenum을 작은 순서(오름차순)로 정렬
       });
   
       res.status(200).json({ votes });
@@ -62,14 +63,15 @@ router.post('/join', validateToken, async (req, res) => {
       res.status(500).json({ message: '조회 도중 오류가 발생했습니다.' });
     }
   });
-
+  
   //changer
   router.get('/changer', validateToken, async (req, res) => {
     try {
-      // Vote 테이블에서 11번째부터 나머지 name을 조회
+      // Vote 테이블에서 votenum이 작은 순서대로 11번째부터 끝까지의 name을 조회
       const votes = await Vote.findAll({
         offset: 10, // 11번째부터 시작
-        attributes: ['name']
+        attributes: ['name'],
+        order: [['votenum', 'ASC']] // votenum을 작은 순서(오름차순)로 정렬
       });
   
       res.status(200).json({ votes });
@@ -78,7 +80,7 @@ router.post('/join', validateToken, async (req, res) => {
       console.error(error);
       res.status(500).json({ message: '조회 도중 오류가 발생했습니다.' });
     }
-  });  
+  });
   
   router.get('/shuffle', validateToken, async (req, res) => {
     try {
