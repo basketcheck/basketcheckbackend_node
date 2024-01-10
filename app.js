@@ -2,17 +2,20 @@ const express = require("express");
 const cors = require("cors");
 const { sequelize } = require("./models");
 const cron = require('node-cron');
-
+const { swaggerUi, specs } = require('./modules/swagger');
 const app = express();
+
 app.use(
 	cors({
-		origin: 'http://localhost:3000',
+		origin: 'https://bssmball.netlify.app',
 		credentials: true,
 		withCredentials: true,
 		optionsSuccessStatus: 200,
 	})
 );
+
 app.set("port", process.env.PORT);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 sequelize
   .sync({ force: false })
