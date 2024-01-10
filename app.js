@@ -7,7 +7,7 @@ const app = express();
 
 app.use(
 	cors({
-		origin: 'https://bssmball.netlify.app', //이거 env로 바꿔야됨 ㅋㅋ
+		origin: '*', //이거 env로 바꿔야됨 ㅋㅋ
 		credentials: true,
 		withCredentials: true,
 		optionsSuccessStatus: 200,
