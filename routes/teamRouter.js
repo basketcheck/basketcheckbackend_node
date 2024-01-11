@@ -121,7 +121,8 @@ router.get('/shuffle', validateToken, async (req, res) => {
     // Vote 테이블에서 모든 레코드 조회
     const votes = await Vote.findAll({
       limit: 10, // 최대 10개의 결과만 가져오기
-      attributes: ['name']
+      attributes: ['name'],
+      order: [['votenum', 'ASC']] // votenum을 작은 순서(오름차순)로 정렬
     });
 
     // 조회된 레코드를 랜덤하게 섞음
